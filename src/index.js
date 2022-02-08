@@ -2,6 +2,7 @@ import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
+import Giphy from './giphy.js';
 
 
 
@@ -15,22 +16,26 @@ $(document).ready(function() {
     }
     $('#search').val("");
 
-    let request = new XMLHttpRequest();
-    request.onreadystatechange = function() {
-      if (this.readyState === 4 && this.status === 200) {
-        const response = JSON.parse(this.responseText);
-        getElements(response);
-      }
-    };
+    let promise = Giphy.getGifs(url);
 
-    request.open("GET", url, true);
-    request.send();
+    /*
+    promise.then(function(response) {
+      const body = JSON.parse(response);
+      $('.showHumidity').text(`The humidity in ${city} is ${body.main.humidity}%`);
+      $('.showTemp').text(`The temperature in Kelvins is ${body.main.temp} degrees.`);
+    }, function(error) {
+      $('.showErrors').text(`There was an error processing your request: ${error}`);
+    });
+    */
 
-    function getElements(response) {
+    promise.then(function(response) {
+      const body = JSON.parse(response);
       for (let i = 0; i < 50; i++) {
-        $('.result').append(`<a href="${response.data[i].url}"><img src="${response.data[i].images.fixed_height_small.url}"></a>`);
+        $('.result').append(`<a href="${body.data[i].url}"><img src="${body.data[i].images.fixed_height_small.url}"></a>`);
       }
-    }
+    }, function(error) {
+      $('.showErrors').text(`There was an error processing your request: ${error}`);
+    });
   });
 
   $('#upload-button').click(function() {
@@ -60,9 +65,8 @@ $(document).ready(function() {
   });
 });
 
+// $.post( "test.php", { name: "John", time: "2pm" } );
 
- // $.post( "test.php", { name: "John", time: "2pm" } );
 
-
-    // let xhr = $.post(`https://upload.giphy.com/v1/gifs?source_image_url=https://pbs.twimg.com/profile_images/1377812736734859265/-TFg2f2D_400x400.jpg&api_key=${process.env.API_KEY}`);
-    // xhr.done(function(data) { console.log("success got data", data); });
+// let xhr = $.post(`https://upload.giphy.com/v1/gifs?source_image_url=https://pbs.twimg.com/profile_images/1377812736734859265/-TFg2f2D_400x400.jpg&api_key=${process.env.API_KEY}`);
+// xhr.done(function(data) { console.log("success got data", data); });
