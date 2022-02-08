@@ -17,17 +17,7 @@ $(document).ready(function() {
     $('#search').val("");
 
     let promise = Giphy.getGifs(url);
-
-    /*
-    promise.then(function(response) {
-      const body = JSON.parse(response);
-      $('.showHumidity').text(`The humidity in ${city} is ${body.main.humidity}%`);
-      $('.showTemp').text(`The temperature in Kelvins is ${body.main.temp} degrees.`);
-    }, function(error) {
-      $('.showErrors').text(`There was an error processing your request: ${error}`);
-    });
-    */
-
+    
     promise.then(function(response) {
       const body = JSON.parse(response);
       for (let i = 0; i < 50; i++) {
@@ -51,22 +41,11 @@ $(document).ready(function() {
       if (this.readyState === 3){
         console.log('LOADING');
       } else if (this.readyState === 4 && this.status === 200) {
-        // const response = JSON.parse(this.responseText);
-        // getUpload(response);
         console.log('omg it worked');
       }
     };
 
     request.send(upload);
 
-    //function getUpload(response) {
-    //  
-    //}
   });
 });
-
-// $.post( "test.php", { name: "John", time: "2pm" } );
-
-
-// let xhr = $.post(`https://upload.giphy.com/v1/gifs?source_image_url=https://pbs.twimg.com/profile_images/1377812736734859265/-TFg2f2D_400x400.jpg&api_key=${process.env.API_KEY}`);
-// xhr.done(function(data) { console.log("success got data", data); });
